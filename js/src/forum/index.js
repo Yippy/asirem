@@ -11,7 +11,6 @@ app.initializers.add('afrux-asirem', () => {
     const discussionListItemContent = vnode.children.find(
       (e) => e && e.tag === 'div' && e.attrs && e.attrs.className.includes('DiscussionListItem-content')
     );
-
     discussionListItemContent.children[0] = (
       <div className="DiscussionListItem-author-container">{[discussionListItemContent.children[0], discussionListItemContent.children[1]]}</div>
     );
@@ -21,13 +20,16 @@ app.initializers.add('afrux-asirem', () => {
     discussionListItemContent.children[3] = <div className="DiscussionListItem-stats">{discussionListItemContent.children[3]}</div>;
 
     if (this.attrs.discussion.tags() && this.attrs.discussion.tags()[0] && this.attrs.discussion.tags()[0].color()) {
-      vnode.attrs.style = { '--tag-color': this.attrs.discussion.tags()[0].color(), ...(vnode.attrs.style || {}) };
+      vnode.attrs.style = {'background': this.attrs.discussion.tags()[0].color(), ...(vnode.attrs.style || {}) };
     }
 
     if (this.attrs.discussion.isUnread()) {
       vnode.attrs.className += ' DiscussionListItem--unread';
+    } else {
+      vnode.attrs.className += ' DiscussionListItem--read';
     }
   });
+
 
   extend(DiscussionListItem.prototype, 'infoItems', function (items) {
     if (!items.has('excerpt')) {
@@ -38,6 +40,14 @@ app.initializers.add('afrux-asirem', () => {
 
         items.add('excerpt', <div>{excerpt}</div>, -100);
       }
+    }
+    if (items.has('tags')) {
+      items.remove('tags');
+    }
+
+    if (this.attrs.discussion.tags() && this.attrs.discussion.tags()[0]) {
+      items.add('tag', 
+      <span class='TagLabel-footer'><center><i aria-hidden="true" class={'TagLabel-icon ' + this.attrs.discussion.tags()[0].data.attributes.icon + " fa-1x"}></i>{this.attrs.discussion.tags()[0].data.attributes.name}</center></span>, -100);
     }
   });
 

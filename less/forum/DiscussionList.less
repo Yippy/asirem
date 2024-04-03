@@ -1,10 +1,43 @@
 .DiscussionList {
-  @media @phone {
-    margin: 0;
+  .item-tag:before {
+    content: "\a";
+    white-space: pre;
   }
-
+  .item-terminalPost {
+    position: absolute;
+    right:10px;
+    bottom:27px;
+  }
+  .item-excerpt {
+    display:block !important;
+    width:100%;
+  }
+  .item-excerpt:after {
+    content: "\a";
+    white-space: pre;
+  }
+  .item-tag {
+    width: 100%;
+    border-top: solid 1px;
+    line-height: 10px;
+  }
+  .DiscussionListItem-stats, .DiscussionListItem-count {
+    color: white !important;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+  }
   &-discussions > li {
     .asirem-border-radius(~'.Avatar');
+
+    .TagLabel-footer {
+      color: #000 !important;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .item-excerpt, .item-terminalPost {
+      color: white !important;
+      font-size: 12px;
+      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    }
   }
 
   &Item {
@@ -14,7 +47,14 @@
     border-radius: @border-radius;
 
     &-controls .Dropdown-toggle {
-      border-radius: @border-radius;
+      position: absolute;
+      top: -20px;
+      right: -8px;
+      width: 35px;
+      height: 35px;
+      border-radius: 5px;
+      border-width: 0 35px 35px 0;
+      color: #ffffff;
     }
 
     &-info {
@@ -43,22 +83,23 @@
       }
     }
 
-    &--unread &-title::after {
-      --size: 8px;
+    &--unread::before {
       content: "";
-      height: var(--size);
-      width: var(--size);
-      line-height: var(--size);
-      background: @primary-color;
-      color: #fff;
-      border-radius: 100%;
-      font-size: 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      vertical-align: text-top;
-      margin-top: 6px;
-      margin-left: 5px;
+      position: absolute;
+      right: 0;
+      border-radius: 5px;
+      border-width: 0 35px 35px 0;
+      border-style: solid;
+      border-color: #2199fc @body-bg
+    }
+    &--read::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      border-radius: 5px;
+      border-width: 0 35px 35px 0;
+      border-style: solid;
+      border-color: #595a58 @body-bg
     }
   }
 
@@ -70,12 +111,6 @@
       height: 100%;
     }
   }
-}
-
-.TagsLabel .TagLabel:not(.overspecifying__) {
-  border-radius: @border-radius;
-  margin-right: 5px;
-  font-size: 11px;
 }
 
 .App {
@@ -90,14 +125,19 @@
   }
 
   .DiscussionListItem {
+    & {
+      border-radius: 15px 42px 15px 15px
+    }
     &-info {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
     }
 
-    &-title {
-      color: @text-color !important;
+    &-title{
+      color: white !important;
+      font-size: 20px;
+      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     }
 
     &-main {
@@ -161,19 +201,7 @@
 }
 
 @media @phone {
-  .DiscussionListItem {
-    .unread &-count {
-      padding: 0 4px;
-    }
-  }
-}
-
-
-@media @tablet-up {
-  .DiscussionListItem {
-    .item-excerpt {
-      margin-right: 0;
-      width: 100%;
-    }
+  .item-terminalPost {
+    display:none !important;
   }
 }
