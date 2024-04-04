@@ -5,11 +5,13 @@
   }
   .item-terminalPost {
     position: absolute;
+    font-size: 14px;
     right:10px;
-    bottom:27px;
+    bottom:28px;
   }
   .item-excerpt {
     display:block !important;
+    font-size: 14px;
     width:100%;
   }
   .item-excerpt:after {
@@ -19,7 +21,7 @@
   .item-tag {
     width: 100%;
     border-top: solid 1px;
-    line-height: 10px;
+    line-height: 32px;
   }
   .DiscussionListItem-stats, .DiscussionListItem-count {
     color: white !important;
@@ -28,10 +30,15 @@
   &-discussions > li {
     .asirem-border-radius(~'.Avatar');
 
-    .TagLabel-footer {
-      color: #000 !important;
-      font-size: 18px;
+    .TagLabel-inner {
+      color: white !important;
+      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+      font-size: 16px;
       font-weight: bold;
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     .item-excerpt, .item-terminalPost {
       color: white !important;
@@ -83,6 +90,14 @@
       }
     }
 
+    &--footer {
+      font-weight: bold;
+      margin-left: 10px;
+      color: white !important;
+      font-size: 16px;
+      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    }
+
     &--unread::before {
       content: "";
       position: absolute;
@@ -92,6 +107,7 @@
       border-style: solid;
       border-color: #2199fc @body-bg
     }
+
     &--read::before {
       content: "";
       position: absolute;
@@ -197,11 +213,24 @@
         float: none;
       }
     }
+
+    &-footer {
+      border-radius: 0px 0px 15px 15px;
+      position: absolute;
+      height: 18%;
+      width: 100%;
+      left: 0%;
+      bottom: 0%;
+    }
   }
 }
 
 @media @phone {
   .item-terminalPost {
     display:none !important;
+  }
+  .item-tag {
+    width: 100%;
+    border-top: none;
   }
 }

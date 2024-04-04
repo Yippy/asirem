@@ -19,8 +19,14 @@ app.initializers.add('afrux-asirem', () => {
 
     discussionListItemContent.children[3] = <div className="DiscussionListItem-stats">{discussionListItemContent.children[3]}</div>;
 
-    if (this.attrs.discussion.tags() && this.attrs.discussion.tags()[0] && this.attrs.discussion.tags()[0].color()) {
-      vnode.attrs.style = {'background': this.attrs.discussion.tags()[0].color(), ...(vnode.attrs.style || {}) };
+    if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 0) {
+      for (const tag of this.attrs.discussion.tags()) {
+        if (tag.data.attributes.isChild) {
+          vnode.attrs.style = {'background': tag.color(), ...(vnode.attrs.style || {}) };
+        } else {
+          discussionListItemContent.children.push(<span class='DiscussionListItem-footer ' style={'background:' + tag.color()}><span class='DiscussionListItem--footer'><i aria-hidden="true" class={'TagLabel-icon ' + tag.data.attributes.icon + " fa-1x"}></i>{tag.data.attributes.name}</span></span>);
+        }
+      };
     }
 
     if (this.attrs.discussion.isUnread()) {
@@ -45,9 +51,12 @@ app.initializers.add('afrux-asirem', () => {
       items.remove('tags');
     }
 
-    if (this.attrs.discussion.tags() && this.attrs.discussion.tags()[0]) {
+    if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 1) {
       items.add('tag', 
-      <span class='TagLabel-footer'><center><i aria-hidden="true" class={'TagLabel-icon ' + this.attrs.discussion.tags()[0].data.attributes.icon + " fa-1x"}></i>{this.attrs.discussion.tags()[0].data.attributes.name}</center></span>, -100);
+      <span class='TagLabel-inner'><center><i aria-hidden="true" class={'TagLabel-icon ' + this.attrs.discussion.tags()[0].data.attributes.icon + " fa-1x"}></i>{this.attrs.discussion.tags()[0].data.attributes.name}</center></span>, -100);
+    } else {
+      items.add('tag', 
+      <span class='TagLabel-inner'></span>, -100);
     }
   });
 
