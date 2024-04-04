@@ -52,8 +52,12 @@ app.initializers.add('afrux-asirem', () => {
     }
 
     if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 1) {
-      items.add('tag', 
-      <span class='TagLabel-inner'><center><i aria-hidden="true" class={'TagLabel-icon ' + this.attrs.discussion.tags()[0].data.attributes.icon + " fa-1x"}></i>{this.attrs.discussion.tags()[0].data.attributes.name}</center></span>, -100);
+      for (const tag of this.attrs.discussion.tags()) {
+        if (tag.data.attributes.isChild) {
+        items.add('tag', 
+          <span class='TagLabel-inner'><center><i aria-hidden="true" class={'TagLabel-icon ' + tag.data.attributes.icon + " fa-1x"}></i>{tag.data.attributes.name}</center></span>, -100);
+        }
+      }
     } else {
       items.add('tag', 
       <span class='TagLabel-inner'></span>, -100);
