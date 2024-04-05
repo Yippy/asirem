@@ -7,7 +7,7 @@
     position: absolute;
     font-size: 14px;
     right:10px;
-    bottom:28px;
+    bottom:34px;
   }
   .item-excerpt {
     display:block !important;
@@ -21,7 +21,7 @@
   .item-tag {
     width: 100%;
     border-top: solid 1px;
-    line-height: 32px;
+    line-height: 34px;
   }
   .DiscussionListItem-stats, .DiscussionListItem-count {
     color: white !important;
@@ -31,8 +31,6 @@
     .asirem-border-radius(~'.Avatar');
 
     .TagLabel-inner {
-      color: white !important;
-      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
       font-size: 16px;
       font-weight: bold;
       position: absolute;
@@ -41,9 +39,7 @@
       transform: translate(-50%, -50%);
     }
     .item-excerpt, .item-terminalPost {
-      color: white !important;
       font-size: 12px;
-      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     }
   }
 
@@ -90,12 +86,17 @@
       }
     }
 
-    &--footer {
+    &--primary {
       font-weight: bold;
       margin-left: 10px;
-      color: white !important;
       font-size: 16px;
-      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    }
+    &--secondary {
+      font-weight: bold;
+      position: absolute;
+      top: 2px;
+      right: 10px;
+      font-size: 12px;
     }
 
     &--unread::before {
@@ -144,16 +145,24 @@
     & {
       border-radius: 15px 42px 15px 15px
     }
-    &-info {
+
+    &-info-edit {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      font-size: 11px;
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: wrap
     }
 
-    &-title{
-      color: white !important;
+    &-title-edit{
+      margin: 0 0 3px;
+      line-height: 1.3;
+      font-weight: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-size: 20px;
-      text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     }
 
     &-main {

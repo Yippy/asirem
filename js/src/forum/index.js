@@ -3,6 +3,11 @@ import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 import TagsPage from 'flarum/tags/components/TagsPage';
 import AsiremTagsPage from './components/TagsPage';
 import { truncate } from 'flarum/utils/string';
+import textContrastClass from 'flarum/common/helpers/textContrastClass';
+import classList from 'flarum/common/utils/classList';
+import Link from 'flarum/common/components/Link';
+import highlight from 'flarum/common/helpers/highlight';
+import listItems from 'flarum/common/helpers/listItems';
 
 import Footer from 'flarum/extensions/afrux-theme-base/forum/components/Footer';
 
@@ -19,16 +24,44 @@ app.initializers.add('afrux-asirem', () => {
 
     discussionListItemContent.children[3] = <div className="DiscussionListItem-stats">{discussionListItemContent.children[3]}</div>;
 
+    let isChildFound = false;
     if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 0) {
+      // Collect all secondary tags that has position set as 'null'
+      let secondaryTags = {
+        tag: "span",
+        attrs: {
+          class: "DiscussionListItem--secondary",
+          style: {
+          },
+        },
+        children: []
+      };
       for (const tag of this.attrs.discussion.tags()) {
         if (tag.data.attributes.isChild) {
+          isChildFound = true;
           vnode.attrs.style = {'background': tag.color(), ...(vnode.attrs.style || {}) };
+        } else if (tag.data.attributes.position == null) {
+          secondaryTags.children.push(
+            <span class="TagLabel" style={'--tag-bg:' + tag.color()}>
+              <span class={classList("TagLabel-text", textContrastClass(tag.color()))}>
+                <i class={'TagLabel-icon ' + tag.data.attributes.icon }></i>
+                <span class="TagLabel-name">{tag.data.attributes.name}</span>
+              </span>
+            </span>
+          );
         } else {
-          discussionListItemContent.children.push(<span class='DiscussionListItem-footer ' style={'background:' + tag.color()}><span class='DiscussionListItem--footer'><i aria-hidden="true" class={'TagLabel-icon ' + tag.data.attributes.icon + " fa-1x"}></i>{tag.data.attributes.name}</span></span>);
+          discussionListItemContent.children.push(
+            <span class={classList('DiscussionListItem-footer', textContrastClass(tag.color()))} style={'background:' + tag.color()}>
+              <span class='DiscussionListItem--primary'>
+                <i aria-hidden="true" class={'TagLabel-icon ' + tag.data.attributes.icon + " fa-1x"}></i>{tag.data.attributes.name}
+              </span>{secondaryTags}
+            </span>);
         }
       };
     }
-
+    if (!isChildFound) {
+      vnode.attrs.style = {'background': '#e8ecf3', ...(vnode.attrs.style || {}) };
+    }
     if (this.attrs.discussion.isUnread()) {
       vnode.attrs.className += ' DiscussionListItem--unread';
     } else {
@@ -36,8 +69,40 @@ app.initializers.add('afrux-asirem', () => {
     }
   });
 
+  override(DiscussionListItem.prototype, 'mainView', function () {
+    const discussion = this.attrs.discussion;
+    const jumpTo = this.getJumpTo();
+
+    let childTag = null;
+    if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 1) {
+      for (const tag of this.attrs.discussion.tags()) {
+        if (tag.data.attributes.isChild) {
+          childTag = tag;
+          break;
+        }
+      }
+    }
+    // Override text color depending on child tag.
+    const textContrastColor = childTag? textContrastClass(childTag.color()): textContrastClass('#ffffff');
+    return (
+      <Link href={app.route.discussion(discussion, jumpTo)} className="DiscussionListItem-main">
+        <h2 className={classList("DiscussionListItem-title-edit", textContrastColor)}>{highlight(discussion.title(), this.highlightRegExp)}</h2>
+        <ul className={classList("DiscussionListItem-info-edit", textContrastColor)}>{listItems(this.infoItems().toArray())}</ul>
+      </Link>
+    );
+  });
 
   extend(DiscussionListItem.prototype, 'infoItems', function (items) {
+    let childTag = null;
+    if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 1) {
+      for (const tag of this.attrs.discussion.tags()) {
+        if (tag.data.attributes.isChild) {
+          childTag = tag;
+          break;
+        }
+      }
+    }
+
     if (!items.has('excerpt')) {
       const firstPost = this.attrs.discussion.firstPost();
 
@@ -47,20 +112,17 @@ app.initializers.add('afrux-asirem', () => {
         items.add('excerpt', <div>{excerpt}</div>, -100);
       }
     }
+
+    // Display tag
     if (items.has('tags')) {
       items.remove('tags');
     }
 
-    if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 1) {
-      for (const tag of this.attrs.discussion.tags()) {
-        if (tag.data.attributes.isChild) {
-        items.add('tag', 
-          <span class='TagLabel-inner'><center><i aria-hidden="true" class={'TagLabel-icon ' + tag.data.attributes.icon + " fa-1x"}></i>{tag.data.attributes.name}</center></span>, -100);
-        }
-      }
-    } else {
+    if (childTag) {
       items.add('tag', 
-      <span class='TagLabel-inner'></span>, -100);
+        <span class='TagLabel-inner'><center><i aria-hidden="true" class={'TagLabel-icon ' + childTag.data.attributes.icon + " fa-1x"}></i>{childTag.data.attributes.name}</center></span>, -100);
+    } else {
+      items.add('tag', <span class='TagLabel-inner'></span>, -100);
     }
   });
 
