@@ -18,6 +18,18 @@ app.initializers.add(
     extend(PermissionGrid.prototype, ['oncreate', 'onupdate'], function (vnode) {
       $('.PermissionGrid-child .Button--text').removeClass('Button--text');
     });
+    app.extensionData
+      .registerSetting({
+          setting: 'afrux-asirem.design-default',
+          type: 'select',
+          options: {
+              'StickyNote': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note'),
+              'StickyNoteMinimal': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_minimal'),
+          },
+          default: 'StickyNote',
+          label: app.translator.trans('afrux-asirem.admin.labels.design_default'),
+          help: app.translator.trans('afrux-asirem.admin.helps.design_default'),
+      });
   },
   -999999
 );

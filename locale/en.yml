@@ -1,0 +1,10 @@
+afrux-asirem:
+  admin:
+    labels:
+      design_default: Discussion Design Layout
+    helps:
+      design_default: Select a default design layout
+    options:
+      design_options:
+        sticky_note: Sticky Note
+        sticky_note_minimal: Sticky Note Minimal

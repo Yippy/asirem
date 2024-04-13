@@ -41,5 +41,13 @@ return [
     (new Extend\View)
         ->namespace("afrux-asirem", __DIR__."/views"),
 
+    (new Extend\Settings())
+        ->serializeToForum('afrux-asirem.designDefault', 'afrux-asirem.design-default', function (?string $value): string {
+            return $value ? $value : 'StickyNote';
+        })
+        ->serializeToForum('afrux-asirem.designByTags', 'afrux-asirem.design-by-tags', function (?string $value): array {
+            return $value ? json_decode($value, true) : [];
+        }),
+
     new Extend\Locales(__DIR__.'/locale'),
 ];

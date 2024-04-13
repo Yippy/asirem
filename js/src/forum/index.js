@@ -11,26 +11,47 @@ import listItems from 'flarum/common/helpers/listItems';
 
 import Footer from 'flarum/extensions/afrux-theme-base/forum/components/Footer';
 
+const designOptions = {
+  "StickyNote": {
+    isTagBackgroundColorRequired: true,
+    backgroundColor: '#e8ecf3',
+    isOutlineTagBackgroundColorRequired: false,
+    outlineBackgroundColor: '#595a58',
+    unreadColor: '#2199fc',
+  },
+  "StickyNoteMinimal": {
+    isTagBackgroundColorRequired: false,
+    backgroundColor: '#e8ecf3',
+    isOutlineTagBackgroundColorRequired: true,
+    outlineBackgroundColor: '#595a58',
+    unreadColor: '#2199fc',
+  }
+};
+
 app.initializers.add('afrux-asirem', () => {
   extend(DiscussionListItem.prototype, 'view', function (vnode) {
     const discussionListItemContent = vnode.children.find(
       (e) => e && e.tag === 'div' && e.attrs && e.attrs.className.includes('DiscussionListItem-content')
     );
+    let discussionDesign = app.forum.attribute('afrux-asirem.designDefault');
+    let discussionDesignOption = designOptions[discussionDesign];
+
     discussionListItemContent.children[0] = (
-      <div className="DiscussionListItem-author-container">{[discussionListItemContent.children[0], discussionListItemContent.children[1]]}</div>
+      <div className='DiscussionListItem-author-container'>{[discussionListItemContent.children[0], discussionListItemContent.children[1]]}</div>
     );
 
     delete discussionListItemContent.children[1];
 
-    discussionListItemContent.children[3] = <div className="DiscussionListItem-stats">{discussionListItemContent.children[3]}</div>;
+    discussionListItemContent.children[3] = <div className='DiscussionListItem-stats'>{discussionListItemContent.children[3]}</div>;
 
-    let isChildFound = false;
+    let childTagFound = null;
+    let parentTagFound = null;
     if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 0) {
       // Collect all secondary tags that has position set as 'null'
       let secondaryTags = {
         tag: "span",
         attrs: {
-          class: "DiscussionListItem--secondary",
+          class: 'DiscussionListItem--secondary',
           style: {
           },
         },
@@ -38,8 +59,7 @@ app.initializers.add('afrux-asirem', () => {
       };
       for (const tag of this.attrs.discussion.tags()) {
         if (tag.data.attributes.isChild) {
-          isChildFound = true;
-          vnode.attrs.style = {'background': tag.color(), ...(vnode.attrs.style || {}) };
+          childTagFound = tag;
         } else if (tag.data.attributes.position == null) {
           secondaryTags.children.push(
             <span class="TagLabel" style={'--tag-bg:' + tag.color()}>
@@ -50,22 +70,38 @@ app.initializers.add('afrux-asirem', () => {
             </span>
           );
         } else {
-          discussionListItemContent.children.push(
-            <span class={classList('DiscussionListItem-footer', textContrastClass(tag.color()))} style={'background:' + tag.color()}>
-              <span class='DiscussionListItem--primary'>
-                <i aria-hidden="true" class={'TagLabel-icon ' + tag.data.attributes.icon + " fa-1x"}></i>{tag.data.attributes.name}
-              </span>{secondaryTags}
-            </span>);
+          parentTagFound = tag;
         }
       };
+
+      if (parentTagFound) {
+        if (childTagFound == null) {
+          childTagFound = parentTagFound;
+        }
+        discussionListItemContent.children.push(
+          <span class={classList('DiscussionListItem-footer', textContrastClass(discussionDesignOption.isTagBackgroundColorRequired ? parentTagFound.color() : discussionDesignOption.backgroundColor))} style={'background:' + (discussionDesignOption.isTagBackgroundColorRequired ? parentTagFound.color() : 'transparent') }>
+            <span class='DiscussionListItem--primary'>
+              <i aria-hidden="true" class={'TagLabel-icon ' + parentTagFound.data.attributes.icon + " fa-1x"}></i>{parentTagFound.data.attributes.name}
+            </span>{secondaryTags}
+          </span>
+        );
+      }
     }
-    if (!isChildFound) {
-      vnode.attrs.style = {'background': '#e8ecf3', ...(vnode.attrs.style || {}) };
+    if (childTagFound) {
+      vnode.attrs.style = {'background': (discussionDesignOption.isTagBackgroundColorRequired? childTagFound.color(): discussionDesignOption.backgroundColor), ...(vnode.attrs.style || {}) };
+
+      discussionListItemContent.children.push(<span class=' DiscussionListItem--read' style={'border-color:' + (discussionDesignOption.isOutlineTagBackgroundColorRequired ? childTagFound.color() : discussionDesignOption.outlineBackgroundColor)}></span>);
+    } else {
+      vnode.attrs.style = {'background': discussionDesignOption.backgroundColor, ...(vnode.attrs.style || {}) };
+
+      discussionListItemContent.children.push(<span class=' DiscussionListItem--read' style={'border-color:' + discussionDesignOption.outlineBackgroundColor}></span>);
     }
     if (this.attrs.discussion.isUnread()) {
-      vnode.attrs.className += ' DiscussionListItem--unread';
-    } else {
-      vnode.attrs.className += ' DiscussionListItem--read';
+      discussionListItemContent.children.push(<span class=' DiscussionListItem--unread' style={'border-color:' +discussionDesignOption.unreadColor}></span>);
+    }
+    vnode.attrs.className += ' ' + discussionDesign;
+    if (discussionDesign == 'StickyNoteMinimal') {
+      discussionListItemContent.attrs.style = {'box-shadow': ('inset -6px -6px 0px 0px '+childTagFound.color())};
     }
   });
 
@@ -73,19 +109,31 @@ app.initializers.add('afrux-asirem', () => {
     const discussion = this.attrs.discussion;
     const jumpTo = this.getJumpTo();
 
-    let childTag = null;
-    if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 1) {
-      for (const tag of this.attrs.discussion.tags()) {
-        if (tag.data.attributes.isChild) {
-          childTag = tag;
-          break;
+    let discussionDesign = app.forum.attribute('afrux-asirem.designDefault');
+    let discussionDesignOption = designOptions[discussionDesign];
+
+    let textContrastColor = textContrastClass(discussionDesignOption.backgroundColor);
+    // Override text color depending if isTagBackgroundColorRequired
+    if (discussionDesignOption.isTagBackgroundColorRequired) {
+      if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 0) {
+        let childTagFound = null;
+        let parentTagFound = null;
+        for (const tag of this.attrs.discussion.tags()) {
+          if (tag.data.attributes.isChild) {
+            childTagFound = tag;
+          } else if (tag.data.attributes.position >= 0) {
+            parentTagFound = tag;
+          }
+        }
+        if (childTagFound) {
+          textContrastColor = textContrastClass(childTagFound.color());
+        } else if (parentTagFound) {
+          textContrastColor = textContrastClass(parentTagFound.color());
         }
       }
     }
-    // Override text color depending on child tag.
-    const textContrastColor = childTag? textContrastClass(childTag.color()): textContrastClass('#ffffff');
     return (
-      <Link href={app.route.discussion(discussion, jumpTo)} className="DiscussionListItem-main">
+      <Link href={app.route.discussion(discussion, jumpTo)} className='DiscussionListItem-main'>
         <h2 className={classList("DiscussionListItem-title-edit", textContrastColor)}>{highlight(discussion.title(), this.highlightRegExp)}</h2>
         <ul className={classList("DiscussionListItem-info-edit", textContrastColor)}>{listItems(this.infoItems().toArray())}</ul>
       </Link>
