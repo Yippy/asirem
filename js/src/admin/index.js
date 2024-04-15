@@ -24,7 +24,13 @@ app.initializers.add(
           type: 'select',
           options: {
               'StickyNote': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note'),
+              'StickyNoteTag': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_tag'),
+              'StickyNoteFilingTag': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_filing_tag'),
+              'StickyNoteBanner': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_banner'),
               'StickyNoteMinimal': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_minimal'),
+              'StickyNoteMinimalTag': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_minimal_tag'),
+              'StickyNoteMinimalFilingTag': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_minimal_filing_tag'),
+              'StickyNoteMinimalBanner': app.translator.trans('afrux-asirem.admin.options.design_options.sticky_note_minimal_banner'),
           },
           default: 'StickyNote',
           label: app.translator.trans('afrux-asirem.admin.labels.design_default'),

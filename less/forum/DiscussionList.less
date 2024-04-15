@@ -96,7 +96,8 @@
     }
   }
 }
-.StickyNoteMinimal {
+
+.StickyNoteMinimal, .StickyNoteMinimalTag, .StickyNoteMinimalFilingTag, .StickyNoteMinimalBanner {
   .DiscussionListItem {
     & {
       border-radius: 15px 42px 15px 15px
@@ -104,14 +105,13 @@
     &--primary {
       font-weight: bold;
       position: absolute;
-      top: -6px;
+      top: -2px;
       left: 10px;
       font-size: 16px;
     }
     &--secondary {
       font-weight: bold;
       position: absolute;
-      top: -6px;
       right: 10px;
       font-size: 12px;
     }
@@ -168,14 +168,109 @@
       border-style: solid;
       border-color: transparent @body-bg
     }
+    &-footer {
+      & {
+        height: 25px;
+      }
+      .PrimaryTagLabel {
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        bottom: 6px;
+        left: 0px;
+        border-radius: 0px 5px 0px 5px;
+        padding-top: 2px;
+        padding-right: 5px;
+        padding-bottom: 2px;
+        padding-left: 5px;
+      }
+    }
+    &--filingfooter {
+      & {
+        height: 24px;
+        border-radius: 0px 0px 0px 0px;
+        position: absolute;
+        width: 100%;
+        left: 0%;
+        bottom: 0%;
+        background: @body-bg
+      }
+      .PrimaryTagLabel {
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        bottom: -1px;
+        left: 6px;
+        border-radius: 0px 0px 5px 5px;
+        padding-top: 2px;
+        padding-right: 5px;
+        padding-bottom: 2px;
+        padding-left: 5px;
+      }
+    }
   }
 }
 
-.StickyNote {
+.StickyNote, .StickyNoteTag, .StickyNoteBanner, .StickyNoteMinimum, .StickyNoteMinimumTag, .StickyNoteMinimumBanner {
   .DiscussionListItem {
     & {
       border-radius: 15px 42px 15px 15px
     }
+    &--secondary {
+      top: 2px;
+    }
+  }
+}
+
+.StickyNoteFilingTag {
+  .DiscussionListItem {
+    & {
+      border-radius: 0px;
+    }
+    &--secondary {
+      top: 12px;
+    }
+  }
+}
+.StickyNoteMinimalFilingTag {
+  .DiscussionListItem {
+    & {
+      border-radius: 0px;
+    }
+    &--secondary {
+      top: 6px;
+    }
+    &--outline {
+      border-radius: 15px 15px 15px 15px;
+      position: absolute;
+      width: 100%;
+      height: calc(100% - 25px);
+      bottom: 20px;
+      left: 0;
+      pointer-events:none;
+    }
+  }
+}
+
+.StickyNoteMinimal, .StickyNoteMinimalTag, .StickyNoteMinimalBanner {
+  .DiscussionListItem {
+    &--secondary {
+      top: 0;
+    }
+    &--outline {
+      border-radius: 15px 15px 15px 15px;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      bottom: 0;
+      left: 0;
+      pointer-events:none;
+    }
+  }
+}
+
+.StickyNote, .StickyNoteTag, .StickyNoteFilingTag, .StickyNoteBanner {
+  .DiscussionListItem {
     &--primary {
       font-weight: bold;
       position: absolute;
@@ -186,7 +281,6 @@
     &--secondary {
       font-weight: bold;
       position: absolute;
-      top: 2px;
       right: 10px;
       font-size: 12px;
     }
@@ -241,6 +335,55 @@
       border-width: 0 35px 35px 0;
       border-style: solid;
       border-color: transparent @body-bg
+    }
+    &-footer {
+      & {
+        height: 24px;
+      }
+      .PrimaryTagLabel {
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        bottom: 6px;
+        left: 6px;
+        border-radius: 5px;
+        padding-top: 2px;
+        padding-right: 5px;
+        padding-bottom: 2px;
+        padding-left: 5px;
+      }
+    }
+    &--outline {
+      border-radius: 15px 15px 15px 15px;
+      position: absolute;
+      width: 100%;
+      height: calc(100% - 10px);
+      bottom: 10px;
+      left: 0;
+      pointer-events:none;
+    }
+    &--filingfooter {
+      & {
+        height: 28px;
+        border-radius: 0px 0px 0px 0px;
+        position: absolute;
+        width: 100%;
+        left: 0%;
+        bottom: -5px;
+        background: @body-bg
+      }
+      .PrimaryTagLabel {
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        bottom: -5px;
+        left: 10px;
+        border-radius: 0px 0px 5px 5px;
+        padding-top: 2px;
+        padding-right: 5px;
+        padding-bottom: 2px;
+        padding-left: 5px;
+      }
     }
   }
 }
@@ -335,9 +478,8 @@
     }
 
     &-footer {
-      border-radius: 0px 0px 15px 15px;
+      border-radius: 0px 0px 13px 13px;
       position: absolute;
-      height: 18%;
       width: 100%;
       left: 0%;
       bottom: 0%;
