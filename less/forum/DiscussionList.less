@@ -375,6 +375,12 @@
 }
 
 .App {
+  .TagLinkButton {
+    display: flex !important;
+  }
+  .item-moreTags {
+    visibility: hidden !important
+  }
   .IndexPage .DiscussionListItem,
   .UserPage .DiscussionListItem {
     &-info {
@@ -473,10 +479,15 @@
     }
   }
 }
-
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  .App .TagLinkButton {
+    visibility: hidden !important;
+    display: none !important;
+  }
+}
 @media @phone {
   .item-terminalPost {
-    display:none !important;
+    display: none !important;
   }
   .item-tag {
     width: 100%;
