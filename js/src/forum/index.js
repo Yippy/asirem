@@ -16,8 +16,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: false,
     isPrimaryTagAnButton: false,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: true,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: true,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: false,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -26,8 +26,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: true,
     isPrimaryTagAnButton: true,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: true,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: true,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: false,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -36,8 +36,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: true,
     isPrimaryTagAnButton: true,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: true,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: true,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: false,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -46,8 +46,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: true,
     isPrimaryTagAnButton: false,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: true,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: true,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: false,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -56,8 +56,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: false,
     isPrimaryTagAnButton: false,
     primaryBackgroundColor: 'transparent',
-    isSecondaryTagBackgroundColorRequired: false,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: false,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: true,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -66,8 +66,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: true,
     isPrimaryTagAnButton: true,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: false,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: false,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: true,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -76,8 +76,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: true,
     isPrimaryTagAnButton: true,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: false,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: false,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: true,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -86,8 +86,8 @@ const designOptions = {
     isPrimaryTagBackgroundColorRequired: true,
     isPrimaryTagAnButton: false,
     primaryBackgroundColor: '#e8ecf3',
-    isSecondaryTagBackgroundColorRequired: false,
-    secondaryBackgroundColor: '#e8ecf3',
+    isChildTagBackgroundColorRequired: false,
+    childBackgroundColor: '#e8ecf3',
     isOutlineTagBackgroundColorRequired: true,
     outlineBackgroundColor: '#595a58',
     unreadColor: '#2199fc',
@@ -167,31 +167,48 @@ app.initializers.add('afrux-asirem', () => {
         }
       }
     }
-    var backgroundColor = discussionDesignOption.secondaryBackgroundColor;
+    let backgroundColor = discussionDesignOption.outlineBackgroundColor;
     if (childTagFound) {
       backgroundColor = childTagFound.color();
     }
     switch(discussionDesign) {
       case 'StickyNoteFilingTag':
-        discussionListItemContent.children.push(
-          <span class='DiscussionListItem--outline' style={'box-shadow:' +('inset -15px -15px 0px 0px '+backgroundColor)}>
-          </span>
-        );
+        if(childTagFound) {
+          discussionListItemContent.children.push(
+            <span class='DiscussionListItem--outline' style={'box-shadow:' +('inset -15px -15px 0px 0px '+backgroundColor)}>
+            </span>
+          );
+        }
+        break;
       case 'StickyNoteMinimal':
       case 'StickyNoteMinimalTag':
-      case 'StickyNoteMinimalFilingTag':
       case 'StickyNoteMinimalBanner':
         discussionListItemContent.children.push(
-          <span class='DiscussionListItem--outline' style={'box-shadow:' +('inset -6px -6px 0px 0px '+backgroundColor)}>
+          <span class='DiscussionListItem--outline' style={'box-shadow:' +('inset -6px -6px 0px 0px '+backgroundColor+'; height: 100%; bottom: 0;')}>
           </span>
         );
+        break;
+      case 'StickyNoteMinimalFilingTag':
+        if(childTagFound) {
+          discussionListItemContent.children.push(
+            <span class='DiscussionListItem--outline' style={'box-shadow:' +('inset -6px -6px 0px 0px '+backgroundColor+';height: calc(100% - 25px); bottom: 18px;')}>
+            </span>
+          );
+          break;
+        } else {
+          discussionListItemContent.children.push(
+            <span class='DiscussionListItem--outline' style={'box-shadow:' +('inset -6px -6px 0px 0px '+backgroundColor+'; height: 100%; bottom: 0;')}>
+            </span>
+          );
+        }
+
     }
     if (childTagFound) {
-      vnode.attrs.style = {'background': (discussionDesignOption.isSecondaryTagBackgroundColorRequired? childTagFound.color(): discussionDesignOption.secondaryBackgroundColor), ...(vnode.attrs.style || {}) };
+      vnode.attrs.style = {'background': (discussionDesignOption.isChildTagBackgroundColorRequired? childTagFound.color(): discussionDesignOption.childBackgroundColor), ...(vnode.attrs.style || {}) };
 
       discussionListItemContent.children.push(<span class=' DiscussionListItem--read' style={'border-color:' + (discussionDesignOption.isOutlineTagBackgroundColorRequired ? childTagFound.color() : discussionDesignOption.outlineBackgroundColor)}></span>);
     } else {
-      vnode.attrs.style = {'background': backgroundColor, ...(vnode.attrs.style || {}) };
+      vnode.attrs.style = {'background': discussionDesignOption.childBackgroundColor, ...(vnode.attrs.style || {}) };
 
       discussionListItemContent.children.push(<span class=' DiscussionListItem--read' style={'border-color:' + discussionDesignOption.outlineBackgroundColor}></span>);
     }
@@ -208,9 +225,9 @@ app.initializers.add('afrux-asirem', () => {
     let discussionDesign = app.forum.attribute('afrux-asirem.designDefault');
     let discussionDesignOption = designOptions[discussionDesign];
 
-    let textContrastColor = textContrastClass(discussionDesignOption.secondaryBackgroundColor);
-    // Override text color depending if isSecondaryTagBackgroundColorRequired
-    if (discussionDesignOption.isSecondaryTagBackgroundColorRequired) {
+    let textContrastColor = textContrastClass(discussionDesignOption.childBackgroundColor);
+    // Override text color depending if isChildTagBackgroundColorRequired
+    if (discussionDesignOption.isChildTagBackgroundColorRequired) {
       if (this.attrs.discussion.tags() && this.attrs.discussion.tags().length > 0) {
         let childTagFound = null;
         let parentTagFound = null;

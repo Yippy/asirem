@@ -31,12 +31,12 @@
     .asirem-border-radius(~'.Avatar');
 
     .TagLabel-inner {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
       position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
     }
     .item-excerpt, .item-terminalPost {
       font-size: 12px;
@@ -115,12 +115,6 @@
       right: 10px;
       font-size: 12px;
     }
-    &-content {
-      display: flex;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 15px 42px 15px 15px;
-    }
     &--unread {
       content: "";
       position: absolute;
@@ -177,8 +171,8 @@
         font-weight: bold;
         position: absolute;
         bottom: 6px;
-        left: 0px;
-        border-radius: 0px 5px 0px 5px;
+        left: 0;
+        border-radius: 0 5px 0 5px;
         padding-top: 2px;
         padding-right: 5px;
         padding-bottom: 2px;
@@ -188,11 +182,11 @@
     &--filingfooter {
       & {
         height: 24px;
-        border-radius: 0px 0px 0px 0px;
+        border-radius: 0 0 0 0;
         position: absolute;
         width: 100%;
-        left: 0%;
-        bottom: 0%;
+        left: 0;
+        bottom: 0;
         background: @body-bg
       }
       .PrimaryTagLabel {
@@ -201,7 +195,7 @@
         position: absolute;
         bottom: -1px;
         left: 6px;
-        border-radius: 0px 0px 5px 5px;
+        border-radius: 0 0 5px 5px;
         padding-top: 2px;
         padding-right: 5px;
         padding-bottom: 2px;
@@ -225,7 +219,7 @@
 .StickyNoteFilingTag {
   .DiscussionListItem {
     & {
-      border-radius: 0px;
+      border-radius: 0;
     }
     &--secondary {
       top: 12px;
@@ -235,18 +229,16 @@
 .StickyNoteMinimalFilingTag {
   .DiscussionListItem {
     & {
-      border-radius: 0px;
+      border-radius: 0;
     }
     &--secondary {
-      top: 6px;
+      top: 8px;
     }
     &--outline {
       border-radius: 15px 15px 15px 15px;
       position: absolute;
       width: 100%;
-      height: calc(100% - 25px);
-      bottom: 20px;
-      left: 0;
+      left: -1px;
       pointer-events:none;
     }
   }
@@ -261,7 +253,6 @@
       border-radius: 15px 15px 15px 15px;
       position: absolute;
       width: 100%;
-      height: 100%;
       bottom: 0;
       left: 0;
       pointer-events:none;
@@ -283,11 +274,6 @@
       position: absolute;
       right: 10px;
       font-size: 12px;
-    }
-    &-content {
-      display: flex;
-      padding: 12px;
-      margin-bottom: 12px;
     }
     &--unread {
       content: "";
@@ -365,7 +351,7 @@
     &--filingfooter {
       & {
         height: 28px;
-        border-radius: 0px 0px 0px 0px;
+        border-radius: 0 0 0 0;
         position: absolute;
         width: 100%;
         left: 0%;
@@ -378,7 +364,7 @@
         position: absolute;
         bottom: -5px;
         left: 10px;
-        border-radius: 0px 0px 5px 5px;
+        border-radius: 0 0 5px 5px;
         padding-top: 2px;
         padding-right: 5px;
         padding-bottom: 2px;
@@ -457,6 +443,7 @@
     &-content {
       display: flex;
       padding: 12px;
+      margin-bottom: 12px;
     }
 
     &-stats {
@@ -478,7 +465,7 @@
     }
 
     &-footer {
-      border-radius: 0px 0px 13px 13px;
+      border-radius: 0 0 13px 13px;
       position: absolute;
       width: 100%;
       left: 0%;
